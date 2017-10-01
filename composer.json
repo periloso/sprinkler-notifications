@@ -1,0 +1,45 @@
+{
+  "name": "periloso/sprinkler-notifications",
+  "description": "A notification channel for the Sprinkler SMS Gateway.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alessio Periloso",
+      "email": "mail@periloso.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.9",
+    "illuminate/notifications": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*",
+    "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*",
+    "guzzlehttp/guzzle": "~6.0"
+  },
+  "require-dev": {
+    "mockery/mockery": "^0.9.5",
+    "phpunit/phpunit": "4.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Periloso\\SprinklerNotifications\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Periloso\\SprinklerNotifications\\Test\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Periloso\\SprinklerNotifications\\SprinklerServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
