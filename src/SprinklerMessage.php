@@ -13,6 +13,7 @@ class SprinklerMessage
         'destination' => null,
         'content' => null,
         'sender' => null,
+        'callback' => null,
 
     ];
 
@@ -21,7 +22,7 @@ class SprinklerMessage
      *
      * @var
      */
-    public $callback;
+    public $callback = null;
 
     /**
      * Create a message
@@ -74,9 +75,9 @@ class SprinklerMessage
      * @param callable $callback The onSuccess callback.
      * @return SprinklerMessage
      */
-    public function callback(callable $callback)
+    public function onSuccess(callable $callback)
     {
-        $this->callback = $callback;
+        $this->attributes['callback'] = $callback;
         return $this;
     }
 
@@ -102,7 +103,8 @@ class SprinklerMessage
         return [
             'destination' => $this->attributes['destination'],
             'content' => $this->attributes['content'],
-            'sender' => $this->attributes['sender']
+            'sender' => $this->attributes['sender'],
+            'callback' => $this->attributes['callback'],
         ];
     }
 }

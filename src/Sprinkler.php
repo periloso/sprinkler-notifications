@@ -5,6 +5,7 @@ namespace Periloso\SprinklerNotifications;
 use Exception;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
+use Periloso\SprinklerNotifications\Exceptions\CouldNotRunCallback;
 use Periloso\SprinklerNotifications\Exceptions\CouldNotSendNotification;
 
 class Sprinkler
@@ -44,15 +45,15 @@ class Sprinkler
      * @return \Psr\Http\Message\ResponseInterface
      * @throws Exception
      */
-    public function send($params)
+    public function send($params, callable $callback = null)
     {
         if (is_null($this->config['url'])) throw new Exception('Sprinkler gateway URL not set!');
         $url = $this->config['url'];
-        if (is_null($this->config['token'])) throw new Exception('Sprinkler gateway TOKEN not set!');
+        if (is_null($this->config['token'])) throw new Exception('Sprinkler gateway Token not set!');
         $token = $this->config['token'];
 
         try {
-            return $this->client->post($url, [
+            $response = $this->client->post($url, [
                 'json' => $params,
                 'headers' => $this->getHeaders(),
             ]);
@@ -61,5 +62,14 @@ class Sprinkler
         } catch (Exception $exception) {
             throw CouldNotSendNotification::couldNotCommunicateWithRemote();
         }
+
+        if ($callback) {
+            try {
+                $callback();
+            } catch (Exception $exception) {
+                throw CouldNotRunCallback::runtimeException($exception);
+            }
+        }
+        return $response;
     }
 }

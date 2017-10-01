@@ -25,13 +25,16 @@ class SprinklerChannel
      * @param Notification $notification
      * @return \Psr\Http\Message\ResponseInterface|void
      */
+
     public function send($notifiable, Notification $notification)
     {
         if (! $to = $notifiable->routeNotificationFor('Sprinkler')) {
             return;
         }
-        $message = $notification->toSMS($notifiable)->to($to);
-        $response = $this->sprinkler->send($message->toArray());
+        $message = $notification->toSprinkler($notifiable)->to($to)->toArray();
+        $callback = $message['callback'];
+        $message = array_except($message, "callback");
+        $response = $this->sprinkler->send($message, $callback);
 
         return $response;
     }
