@@ -48,7 +48,7 @@ class Sprinkler
     public function send($params, callable $callback = null)
     {
         if (is_null($this->config['url'])) throw new Exception('Sprinkler gateway URL not set!');
-        $url = $this->config['url'];
+        $url = $this->config['url'] . '/send';
         if (is_null($this->config['token'])) throw new Exception('Sprinkler gateway Token not set!');
         $token = $this->config['token'];
 

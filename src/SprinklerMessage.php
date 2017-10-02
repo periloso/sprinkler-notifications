@@ -2,6 +2,8 @@
 
 namespace Periloso\SprinklerNotifications;
 
+use Carbon\Carbon;
+
 class SprinklerMessage
 {
     /**
@@ -10,19 +12,16 @@ class SprinklerMessage
      * @var array
      */
     public $attributes = [
-        'destination' => null,
+        'to' => null,
         'content' => null,
-        'sender' => null,
+        'from' => null,
+        'device_id' => null,
+        'send_at' => null,
+        'expires_at' => null,
+        'max_retries' => null,
         'callback' => null,
 
     ];
-
-    /**
-     * The onSuccess callback.
-     *
-     * @var
-     */
-    public $callback = null;
 
     /**
      * Create a message
@@ -48,12 +47,12 @@ class SprinklerMessage
     /**
      * The SMS recipient.
      *
-     * @param $destination
-     * @return $this
+     * @param $to
+     * @return SprinklerMessage
      */
-    public function to($destination)
+    public function to($to)
     {
-        $this->attributes['destination'] = $destination;
+        $this->attributes['to'] = $to;
         return $this;
     }
 
@@ -84,12 +83,60 @@ class SprinklerMessage
     /**
      * The sender.
      *
-     * @param null $sender
+     * @param null $from
      * @return SprinklerMessage
      */
-    public function sender($sender = null)
+    public function from($from = null)
     {
-        $this->attributes['sender'] = $sender;
+        $this->attributes['from'] = $from;
+        return $this;
+    }
+
+    /**
+     * Sets the device id to send the message from.
+     *
+     * @param null $device_id
+     * @return SprinklerMessage
+     */
+    public function device($device_id = null)
+    {
+        $this->attributes['device_id'] = $device_id;
+        return $this;
+    }
+
+    /**
+     * Sets when to send the message.
+     *
+     * @param Carbon $carbon
+     * @return SprinklerMessage
+     */
+    public function sendAt(Carbon $carbon)
+    {
+        $this->attributes['send_at'] = $carbon->getTimestamp();;
+        return $this;
+    }
+
+    /**
+     * Sets the maximum number of retries.
+     *
+     * @param $max
+     * @return SprinklerMessage
+     */
+    public function maxRetries($max)
+    {
+        $this->attributes['max_restries'] = $max;
+        return $this;
+    }
+
+    /**
+     * Sets when to give up sending the message.
+     *
+     * @param Carbon $carbon
+     * @return SprinklerMessage
+     */
+    public function expiresAt(Carbon $carbon)
+    {
+        $this->attributes['expires_at'] = $carbon->getTimestamp();
         return $this;
     }
 
@@ -101,9 +148,13 @@ class SprinklerMessage
     public function toArray()
     {
         return [
-            'destination' => $this->attributes['destination'],
+            'to' => $this->attributes['to'],
             'content' => $this->attributes['content'],
-            'sender' => $this->attributes['sender'],
+            'from' => $this->attributes['from'],
+            'device_id' => $this->attributes['device_id'],
+            'send_at' => $this->attributes['send_at'],
+            'expires_at' => $this->attributes['expires_at'],
+            'max_retries' => $this->attributes['max_restries'],
             'callback' => $this->attributes['callback'],
         ];
     }
